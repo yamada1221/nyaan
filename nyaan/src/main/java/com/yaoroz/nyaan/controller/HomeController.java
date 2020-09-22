@@ -48,12 +48,9 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/json", method = { RequestMethod.GET, RequestMethod.POST })
 	public void json(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-		System.out.println("json");
 		if (RequestMethod.GET.name().equals(request.getMethod())) {
-			System.out.println("get");
 			counter.addJsonRequest();
 		} else {
-			System.out.println("post");
 			counter.addCount();
 		}
 		// jsonで値を返す
@@ -71,7 +68,6 @@ public class HomeController {
 	 */
 	@GetMapping("/graph")
 	public void graph(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-		System.out.println("graph");
 		counter.addGraphRequest();
 		oneMinExecute();
 		// jsonで値を返す
@@ -126,9 +122,6 @@ public class HomeController {
 	 * 1分間隔でデータ更新。
 	 */
 	private void oneMinExecute() {
-//		if (isExecuted)
-//			return; // 起動時に1度きり実行する。
-		System.out.println("1min.起動");
 		// 1分間隔の処理
 		ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
 		ses.scheduleAtFixedRate(new Runnable() {
@@ -142,9 +135,6 @@ public class HomeController {
 				// TODO:ログ出力(CSV?)
 			}
 		}, 0, 60, TimeUnit.SECONDS);
-		for (int i = 0; i < countArray.length - 1; i++) {
-			System.out.print(countArray[i] + ",");
-		}
 	}
 
 }
