@@ -17,6 +17,9 @@ public class Counter {
 	private long jsonRequest = 0;
 	@JsonIgnore
 	private long graphRequest = 0;
+	/** 1時間分のカウント数 */
+	@JsonIgnore
+	private long[] countArray = new long[60];
 
 	public long getCount() {
 		return count;
@@ -34,6 +37,10 @@ public class Counter {
 		return graphRequest;
 	}
 
+	public long[] getCountArray() {
+		return countArray;
+	}
+
 	public long addCount() {
 		return count++;
 	}
@@ -48,5 +55,9 @@ public class Counter {
 
 	public long addGraphRequest() {
 		return graphRequest++;
+	}
+
+	public void setCountArray(long[] countArray) {
+		this.countArray = countArray;
 	}
 }

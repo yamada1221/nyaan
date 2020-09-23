@@ -2,9 +2,6 @@ package com.yaoroz.nyaan.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +22,6 @@ public class HomeServiceImpl implements HomeService {
 	private Counter counter = Counter.getInstance();
 	/** 出力 */
 	private PrintWriter out = null;
-	/** 1時間分のカウント数 */
-	private long[] countArray = new long[60];
 	/** ObjectMapper */
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -55,7 +50,6 @@ public class HomeServiceImpl implements HomeService {
 	@Override
 	public void graph(HttpServletRequest request, HttpServletResponse response) {
 		counter.addGraphRequest();
-		oneMinExecute();
 		// jsonで値を返す
 		response.setContentType("application/json");
 		try {
@@ -91,6 +85,7 @@ public class HomeServiceImpl implements HomeService {
 		JsonFactory jf = new JsonFactory();
 		JsonGenerator jg = null;
 		try {
+			long[] countArray = counter.getCountArray();
 			jg = jf.createGenerator(out);
 			jg.writeStartObject();
 			jg.writeFieldName("countArray");
@@ -104,22 +99,4 @@ public class HomeServiceImpl implements HomeService {
 		return jg.toString();
 	}
 
-	/**
-	 * 1分間隔でデータ更新。
-	 */
-	private void oneMinExecute() {
-		// 1分間隔の処理
-		ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
-		ses.scheduleAtFixedRate(new Runnable() {
-			public void run() {
-				// 現在のデータ
-				countArray[countArray.length - 1] = counter.getCount();
-				for (int i = 0; i < countArray.length; i++) {
-					// n分前のデータ
-					countArray[i] = countArray[i + 1];
-				}
-				// TODO:ログ出力(CSV?)
-			}
-		}, 0, 60, TimeUnit.SECONDS);
-	}
 }
