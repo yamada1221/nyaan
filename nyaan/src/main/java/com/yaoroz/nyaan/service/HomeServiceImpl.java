@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -18,6 +20,8 @@ import com.yaoroz.nyaan.bean.Counter;
 @Service
 public class HomeServiceImpl implements HomeService {
 
+	/** ログ */
+	private static final Logger log = LoggerFactory.getLogger(HomeServiceImpl.class);
 	/** カウンタ */
 	private Counter counter = Counter.getInstance();
 	/** 出力 */
@@ -72,7 +76,7 @@ public class HomeServiceImpl implements HomeService {
 		} catch (JsonProcessingException e) {
 			// 何もしない
 		}
-		System.out.println(json);
+		log.debug(json);
 		return json;
 	}
 
