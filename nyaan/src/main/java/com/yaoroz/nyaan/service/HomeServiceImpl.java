@@ -24,8 +24,6 @@ public class HomeServiceImpl implements HomeService {
 	private static final Logger log = LoggerFactory.getLogger(HomeServiceImpl.class);
 	/** カウンタ */
 	private Counter counter = Counter.getInstance();
-	/** 出力 */
-	private PrintWriter out = null;
 	/** ObjectMapper */
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -41,27 +39,32 @@ public class HomeServiceImpl implements HomeService {
 		} else {
 			counter.addCount();
 		}
-		// jsonで値を返す
-		response.setContentType("application/json");
-		try {
-			out = response.getWriter();
-		} catch (IOException e) {
-			// 何もしない
-		}
+		PrintWriter out = createPrintWriter(response);
 		out.println(createCountJson());
 	}
 
 	@Override
 	public void graph(HttpServletRequest request, HttpServletResponse response) {
 		counter.addGraphRequest();
+		PrintWriter out = createPrintWriter(response);
+		out.println(createGraphJson(out));
+	}
+
+	/**
+	 * PrintWriterを生成する。
+	 * 
+	 * @return PrintWriter
+	 */
+	protected PrintWriter createPrintWriter(HttpServletResponse response) {
 		// jsonで値を返す
 		response.setContentType("application/json");
+		PrintWriter out = null;
 		try {
 			out = response.getWriter();
 		} catch (IOException e) {
-			// 何もしない
+			log.error("PrintWriter生成エラー", e);
 		}
-		out.println(createGraphJson());
+		return out;
 	}
 
 	/**
@@ -74,7 +77,7 @@ public class HomeServiceImpl implements HomeService {
 		try {
 			json = mapper.writeValueAsString(counter);
 		} catch (JsonProcessingException e) {
-			// 何もしない
+			log.error("グラフjson生成エラー", e);
 		}
 		log.debug(json);
 		return json;
@@ -85,9 +88,10 @@ public class HomeServiceImpl implements HomeService {
 	 * 
 	 * @return グラフのjson文字列
 	 */
-	protected String createGraphJson() {
+	protected String createGraphJson(PrintWriter out) {
 		JsonFactory jf = new JsonFactory();
 		JsonGenerator jg = null;
+		String json = null;
 		try {
 			long[] countArray = counter.getCountArray();
 			jg = jf.createGenerator(out);
@@ -97,10 +101,11 @@ public class HomeServiceImpl implements HomeService {
 			jg.writeEndObject();
 			jg.flush();
 			jg.close();
+			json = jg.toString();
 		} catch (IOException e) {
-			// 何もしない
+			log.error("グラフjson生成エラー", e);
 		}
-		return jg.toString();
+		return json;
 	}
 
 }
