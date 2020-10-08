@@ -15,7 +15,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yaoroz.nyaan.bean.Counter;
+import com.yaoroz.nyaan.bean.CounterDetails;
 
 @Service
 public class HomeServiceImpl implements HomeService {
@@ -23,7 +23,7 @@ public class HomeServiceImpl implements HomeService {
 	/** ログ */
 	private static final Logger log = LoggerFactory.getLogger(HomeServiceImpl.class);
 	/** カウンタ */
-	private Counter counter = Counter.getInstance();
+	private CounterDetails counter = CounterDetails.getInstance();
 	/** ObjectMapper */
 	ObjectMapper mapper = new ObjectMapper();
 

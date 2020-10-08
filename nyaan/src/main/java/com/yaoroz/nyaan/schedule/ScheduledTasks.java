@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.yaoroz.nyaan.bean.Counter;
+import com.yaoroz.nyaan.bean.CounterDetails;
 
 @Component
 public class ScheduledTasks {
@@ -18,7 +18,7 @@ public class ScheduledTasks {
 	/** 更新日時 */
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	/** カウンタ */
-	private Counter counter = Counter.getInstance();
+	private CounterDetails counter = CounterDetails.getInstance();
 
 	/**
 	 * 1分間隔でデータ更新。
