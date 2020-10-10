@@ -45,6 +45,18 @@ public class CounterDetails extends Counter {
 		return graphRequest++;
 	}
 
+	public void setView(long view) {
+		this.view = view;
+	}
+
+	public void setJsonRequest(long jsonRequest) {
+		this.jsonRequest = jsonRequest;
+	}
+
+	public void setGraphRequest(long graphRequest) {
+		this.graphRequest = graphRequest;
+	}
+
 	public void setCountArray(long[] countArray) {
 		this.countArray = countArray;
 	}
