@@ -1,5 +1,6 @@
 package com.yaoroz.nyaan.schedule;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -9,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.yaoroz.nyaan.bean.CounterDetails;
+import com.yaoroz.nyaan.common.csv.CSVWriter;
 
 @Component
 public class ScheduledTasks {
@@ -19,6 +21,8 @@ public class ScheduledTasks {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	/** カウンタ */
 	private CounterDetails counter = CounterDetails.getInstance();
+	/** CSV出力 */
+	private CSVWriter cSVWriter = new CSVWriter();
 
 	/**
 	 * 1分間隔でデータ更新。
@@ -36,6 +40,12 @@ public class ScheduledTasks {
 		}
 		// データ更新
 		counter.setCountArray(countArray);
-		// TODO:ログ出力(CSV?)
+		// ログ出力(CSV)
+		try {
+			cSVWriter.write();
+		} catch (IOException e) {
+			log.error("ログ出力エラー", e);
+
+		}
 	}
 }
