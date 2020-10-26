@@ -4,10 +4,15 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class CSVManager {
 
-	@Value("${com.yaoroz.nyaan.common.csv.csvFilePath:C:\\Users\\dev\\Desktop\\develop\\test.csv}")
-	private String csvFilePath = "C:\\Users\\dev\\Desktop\\develop\\test.csv";
+	@Value("${com.yaoroz.nyaan.common.csv.csvFilePath}")
+	private String csvFilePath;
 
-	public String getCSVFilePath() {
+	public String getCsvFilePath() {
 		return csvFilePath;
 	}
+
+	public void setCsvFilePath(String csvFilePath) {
+		this.csvFilePath = csvFilePath;
+	}
+
 }

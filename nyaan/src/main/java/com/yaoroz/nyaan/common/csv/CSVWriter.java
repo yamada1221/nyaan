@@ -3,29 +3,29 @@ package com.yaoroz.nyaan.common.csv;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.yaoroz.nyaan.bean.CounterDetails;
 
+@Component
 public class CSVWriter extends CSVManager {
 
-	CounterDetails counter = CounterDetails.getInstance();
+	/** ログ */
+	private static final Logger log = LoggerFactory.getLogger(CSVWriter.class);
+	/** カウンタ */
+	private CounterDetails counter = CounterDetails.getInstance();
+	/** CsvMapper */
+	private CsvMapper mapper = new CsvMapper();
 
 	public void write() throws IOException {
-		CsvMapper mapper = new CsvMapper();
 		CsvSchema schema = mapper.schemaFor(CounterDetails.class);
 		ObjectWriter writer = mapper.writerFor(CounterDetails.class).with(schema);
-		writer.writeValue(new File(getCSVFilePath()), counter);
-//			// CSVファイルを全行まとめて読み込む場合
-//			List<Counter> userList = it.readAll();
-//			for (Counter user : userList) {
-//
-//				// User(id=001, name=Alice, age=18)
-//				// User(id=002, name=Bob, age=25)
-//				// User(id=003, name=Carol, age=23)
-//				System.out.println(user.toString());
-//			}
-//		}
+		log.debug("CsvFilePath={}", getCsvFilePath());
+		writer.writeValue(new File(getCsvFilePath()), counter);
 	}
 }

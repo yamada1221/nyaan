@@ -8,12 +8,14 @@ import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.yaoroz.nyaan.bean.CounterDetails;
 
+@Component
 public class CSVReader extends CSVManager {
 
 	/** ログ */
@@ -23,7 +25,7 @@ public class CSVReader extends CSVManager {
 		CsvMapper mapper = new CsvMapper();
 		CsvSchema schema = mapper.schemaFor(CounterDetails.class);
 		CounterDetails counter = CounterDetails.getInstance();
-		Path path = Paths.get(getCSVFilePath());
+		Path path = Paths.get(getCsvFilePath());
 		try (BufferedReader br = Files.newBufferedReader(path)) {
 
 			MappingIterator<CounterDetails> it = mapper.readerFor(CounterDetails.class).with(schema).readValues(br);
