@@ -53,7 +53,7 @@ $(function(){
 		)
 		// 更新確認完了
 		.done(function(data) {
-			if (data != null && typeof data.count !== undefined) {
+			if (data != null && typeof data.count !== 'undefined') {
 				$('#count').text(data.count);
 				chartData.data[chartDataNum] = data.count;
 				chart.update();	
@@ -74,7 +74,7 @@ $(function(){
 		)
 		// ボタン押下通信完了
 		.done(function(data) {
-			if (data != null && typeof data.count !== undefined) {
+			if (data != null && typeof data.count !== 'undefined') {
 				$('#count').text(data.count);
 				chartData.data[chartDataNum] = data.count;
 				chart.update();	
