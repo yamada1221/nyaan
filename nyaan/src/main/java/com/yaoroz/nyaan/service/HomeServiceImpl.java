@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yaoroz.nyaan.bean.CounterDetails;
@@ -47,7 +45,7 @@ public class HomeServiceImpl implements HomeService {
 	public void graph(HttpServletRequest request, HttpServletResponse response) {
 		counter.addGraphRequest();
 		PrintWriter out = createPrintWriter(response);
-		out.println(createGraphJson(out));
+		out.println(createGraphJson());
 	}
 
 	/**
@@ -88,23 +86,15 @@ public class HomeServiceImpl implements HomeService {
 	 * 
 	 * @return グラフのjson文字列
 	 */
-	protected String createGraphJson(PrintWriter out) {
-		JsonFactory jf = new JsonFactory();
-		JsonGenerator jg = null;
+	protected String createGraphJson() {
 		String json = null;
 		try {
-			long[] countArray = counter.getCountArray();
-			jg = jf.createGenerator(out);
-			jg.writeStartObject();
-			jg.writeFieldName("countArray");
-			jg.writeArray(countArray, 0, countArray.length);
-			jg.writeEndObject();
-			jg.flush();
-			jg.close();
-			json = jg.toString();
-		} catch (IOException e) {
+			json = mapper.writeValueAsString(
+					java.util.Collections.singletonMap("countArray", counter.getCountArray()));
+		} catch (JsonProcessingException e) {
 			log.error("グラフjson生成エラー", e);
 		}
+		log.debug(json);
 		return json;
 	}
 
